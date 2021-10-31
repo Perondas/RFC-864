@@ -4,8 +4,8 @@ using System.Net;
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
-        var address = context.Configuration.GetValue<string>("ClientSettings:IpAddress");
-        var port = context.Configuration.GetValue<int>("ClientSettings:Port");
+        string? address = context.Configuration.GetValue<string>("ClientSettings:IpAddress");
+        int port = context.Configuration.GetValue<int>("ClientSettings:Port");
         services.Configure<ClientOptions>(options =>
             options.Endpoint = new IPEndPoint(IPAddress.Parse(address), port));
         services.AddHostedService<TcpClient>();

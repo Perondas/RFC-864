@@ -20,11 +20,11 @@ namespace RFC_864_Server
             _logger.LogInformation("UdpWorker starting at: {time}", DateTimeOffset.Now);
             try
             {
-                var listener = new UdpClient(new IPEndPoint(IPAddress.Any, _options.Port));
+                UdpClient listener = new UdpClient(new IPEndPoint(IPAddress.Any, _options.Port));
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     _logger.LogInformation("Udp waiting for message");
-                    var result = await listener.ReceiveAsync(stoppingToken);
+                    UdpReceiveResult result = await listener.ReceiveAsync(stoppingToken);
 
                     _logger.LogInformation("Received message");
                     await Task.Run(() => ReturnMessage(result.RemoteEndPoint), stoppingToken);
@@ -41,7 +41,7 @@ namespace RFC_864_Server
         {
             try
             {
-                var sender = new UdpClient();
+                UdpClient sender = new UdpClient();
                 _logger.LogInformation($"Sending response to {remoteEndPoint.Address}");
                 sender.Send(new byte[] { 1, 2, 3 }, remoteEndPoint);
             }

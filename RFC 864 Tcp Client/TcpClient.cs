@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using System.Net.Sockets;
 
 namespace RFC_864_Tcp_Client
 {
@@ -18,7 +19,7 @@ namespace RFC_864_Tcp_Client
             _logger.LogInformation("Tcp client starting at: {time}", DateTimeOffset.Now);
             while (!stoppingToken.IsCancellationRequested)
             {
-                var client = new System.Net.Sockets.TcpClient();
+                System.Net.Sockets.TcpClient client = new System.Net.Sockets.TcpClient();
                 try
                 {
                     _logger.LogInformation($"Attempting to connect to {_options.Endpoint.Address}:{_options.Endpoint.Port}");
@@ -27,13 +28,13 @@ namespace RFC_864_Tcp_Client
                     _logger.LogInformation("Began receiving data");
                     await Task.Delay(500, stoppingToken);
 
-                    var stream = client.GetStream();
-                    var buffer = new byte[10];
+                    NetworkStream stream = client.GetStream();
+                    byte[] buffer = new byte[10];
                     try
                     {
                         _logger.LogInformation("Began reading from stream");
                         await stream.ReadAsync(buffer, 0, 10, stoppingToken);
-                        var msg = string.Join(",", buffer);
+                        string msg = string.Join(",", buffer);
                         _logger.LogInformation($"Read {msg} from stream");
                     }
                     catch (Exception ex)

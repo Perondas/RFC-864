@@ -18,7 +18,7 @@ namespace RFC_864_Server
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("TcpWorker starting at: {time}", DateTimeOffset.Now);
-            var listener = new TcpListener(IPAddress.Any, _options.Port);
+            TcpListener listener = new TcpListener(IPAddress.Any, _options.Port);
             try
             {
                 listener.Start();
@@ -32,7 +32,7 @@ namespace RFC_864_Server
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Tcp waiting for client");
-                var client = await listener.AcceptTcpClientAsync(stoppingToken);
+                TcpClient client = await listener.AcceptTcpClientAsync(stoppingToken);
                 _logger.LogInformation("Tcp client accepted");
                 await Task.Run(() => HandleClient(client, stoppingToken), stoppingToken);
             }
@@ -44,7 +44,7 @@ namespace RFC_864_Server
         {
             try
             {
-                var stream = client.GetStream();
+                NetworkStream stream = client.GetStream();
                 while (client.Connected && stream.CanWrite)
                 {
                     stream.Write(new byte[] { 1, 2, 3 });

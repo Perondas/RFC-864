@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using System.Net.Sockets;
 
 namespace RFC_864_Udp_Client
 {
@@ -20,7 +21,7 @@ namespace RFC_864_Udp_Client
             {
                 try
                 {
-                    var client = new System.Net.Sockets.UdpClient(0);
+                    System.Net.Sockets.UdpClient? client = new System.Net.Sockets.UdpClient(0);
                     try
                     {
                         _logger.LogInformation("Sending request");
@@ -28,8 +29,8 @@ namespace RFC_864_Udp_Client
                         _logger.LogInformation("Awaiting reply");
                         try
                         {
-                            var reply = await client.ReceiveAsync(stoppingToken);
-                            var msg = string.Join(",", reply.Buffer);
+                            UdpReceiveResult reply = await client.ReceiveAsync(stoppingToken);
+                            string? msg = string.Join(",", reply.Buffer);
                             _logger.LogInformation($"Received: {msg}");
                         }
                         catch
