@@ -5,6 +5,10 @@
 Solution contains one Docker ready server that supports both TCP and UDP RFC-864.
 Solution also contains two example clients (also Docker ready) for server testing purposes.
 
+## Configuration
+
+Both the server and the two clients can be configured trough the appsettings.json file.
+
 ## Licensing
 
 This repository is made pubic under the MIT License.
