@@ -23,11 +23,19 @@ namespace RFC_864_Server
                 UdpClient listener = new UdpClient(new IPEndPoint(IPAddress.Any, _options.Port));
                 while (!stoppingToken.IsCancellationRequested)
                 {
-                    _logger.LogInformation("Udp waiting for message");
-                    UdpReceiveResult result = await listener.ReceiveAsync(stoppingToken);
+                    try
+                    {
+                        _logger.LogInformation("Udp waiting for message");
+                        UdpReceiveResult result = await listener.ReceiveAsync(stoppingToken);
 
-                    _logger.LogInformation("Received message");
-                    await Task.Run(() => ReturnMessage(result.RemoteEndPoint), stoppingToken);
+                        _logger.LogInformation("Received message");
+                        await Task.Run(() => ReturnMessage(result.RemoteEndPoint), stoppingToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failure in receiving message. Possibly got a ICMP reply");
+                        return;
+                    }
                 }
             }
             catch (Exception ex)

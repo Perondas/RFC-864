@@ -26,6 +26,7 @@ namespace RFC_864_Server
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to start Tcp listener");
+                return;
             }
 
 
