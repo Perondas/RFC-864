@@ -35,7 +35,7 @@ namespace RFC_864_Server
                 _logger.LogInformation("Tcp waiting for client");
                 TcpClient client = await listener.AcceptTcpClientAsync(stoppingToken);
                 _logger.LogInformation("Tcp client accepted");
-                await Task.Run(() => HandleClient(client, stoppingToken), stoppingToken);
+                Task.Run(() => HandleClient(client, stoppingToken), stoppingToken);
             }
 
             _logger.LogCritical("TcpWorker terminating");

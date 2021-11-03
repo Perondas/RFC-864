@@ -29,7 +29,7 @@ namespace RFC_864_Server
                         UdpReceiveResult result = await listener.ReceiveAsync(stoppingToken);
 
                         _logger.LogInformation("Received message");
-                        await Task.Run(() => ReturnMessage(result.RemoteEndPoint), stoppingToken);
+                        Task.Run(() => ReturnMessage(result.RemoteEndPoint), stoppingToken);
                     }
                     catch (Exception ex)
                     {
